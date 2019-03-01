@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imooc.demo.dao.SysMenuDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.imooc.demo.entity.SysMenu">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="name" property="name" />
+        <result column="url" property="url" />
+        <result column="code" property="code" />
+        <result column="type" property="type" />
+        <result column="icon" property="icon" />
+        <result column="order_num" property="orderNum" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id AS parentId, name, url, code, type, icon, order_num AS orderNum
+    </sql>
+    <select id="findByAdminUserId" resultType="com.imooc.demo.entity.SysMenu">
+        SELECT
+        sm.id AS 'id',
+        sm.parent_id AS 'parentId',
+        sm.name AS  'name',
+        sm.code AS  'code',
+        sm.type AS  'type',
+        sm.url AS 'url',
+        sm.icon AS  'icon',
+        sm.order_num AS  'orderNum'
+        FROM
+        manager m
+        LEFT JOIN sys_manager_role smr ON m.id=smr.manager_id
+        LEFT JOIN sys_role sr ON smr.role_id=sr.id
+        LEFT JOIN sys_role_menu srm ON srm.role_id=sr.id
+        LEFT JOIN sys_menu sm on sm.id=srm.menu_id
+        WHERE
+        m.id = #{userId}
+    </select>
+    <select id="findAll" resultType="com.imooc.demo.entity.SysMenu">
+        SELECT
+        sm.id AS 'id',
+        sm.parent_id AS 'parentId',
+        sm.name AS  'name',
+        sm.code AS  'code',
+        sm.type AS  'type',
+        sm.icon AS  'icon',
+        sm.url AS 'url',
+        sm.order_num AS  'orderNum'
+        FROM
+        sys_menu sm
+    </select>
+</mapper>
